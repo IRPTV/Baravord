@@ -10,6 +10,7 @@ using Baravord.BLL;
 using Baravord.OBJECTS;
 using Baravord.TOOLS;
 using Baravord.MyDBTableAdapters;
+using System.IO;
 
 namespace Baravord.UI
 {
@@ -208,7 +209,7 @@ namespace Baravord.UI
                     {
 
 
-                      
+
 
 
                         //if (txtTitle.Text.Trim().Length > 1)
@@ -333,7 +334,7 @@ namespace Baravord.UI
 
 
                                         MessageBox.Show("اطلاعات با موفقیت به روز شد");
-                                      //  numericUpDownSort.Focus();
+                                        //  numericUpDownSort.Focus();
                                     }
                                     else
                                     {
@@ -1658,12 +1659,12 @@ namespace Baravord.UI
 
         private void txtDesc_Leave(object sender, EventArgs e)
         {
-          
+
         }
 
         private void txtDesc_Enter(object sender, EventArgs e)
         {
-          
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -1677,7 +1678,7 @@ namespace Baravord.UI
 
         private void txtDesc_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Control&& e.KeyCode == Keys.S)
+            if (e.Control && e.KeyCode == Keys.S)
             {
                 DialogResult Rs = MessageBox.Show("متن توضیحات ذخیره گردد؟", "Save", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (Rs == System.Windows.Forms.DialogResult.Yes)
@@ -1688,6 +1689,39 @@ namespace Baravord.UI
                 {
 
                 }
+            }
+        }
+
+        private void toolStripButton4_Click(object sender, EventArgs e)
+        {
+            ExportToExcel();
+        }
+        protected void ExportToExcel()
+        {
+            if (dgvRoles.Rows.Count > 0)
+            {
+                Microsoft.Office.Interop.Excel.ApplicationClass XcelApp = new Microsoft.Office.Interop.Excel.ApplicationClass();
+                XcelApp.Application.Workbooks.Add(Type.Missing);
+                for (int i = 1; i < dgvRoles.Columns.Count + 1; i++)
+                {
+                    XcelApp.Cells[1, i] = dgvRoles.Columns[i - 1].HeaderText;
+                }
+
+                for (int i = 0; i < dgvRoles.Rows.Count; i++)
+                {
+                    for (int j = 0; j < dgvRoles.Columns.Count; j++)
+                    {
+                        XcelApp.Cells[i + 2, j + 1] = dgvRoles.Rows[i].Cells[j].Value.ToString();
+                    }
+                }
+                XcelApp.Columns.AutoFit();
+                XcelApp.Visible = true;
+                //SaveFileDialog sv = new SaveFileDialog();
+                //sv.ShowDialog();
+                //if (sv.FileName.Length > 0)
+                //    XcelApp.Application.Workbooks[0].SaveAs(sv.FileName.ToLower().Replace(".xlsx", "").Replace(".xls", ""), Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookDefault, Type.Missing, Type.Missing,
+                //     false, false, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange,
+                //     Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
             }
         }
     }
